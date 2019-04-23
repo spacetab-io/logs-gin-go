@@ -8,8 +8,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// MuxLogger logs gin gonic actions
-func GinLogger(l *logrus.Logger) gin.HandlerFunc {
+// NewLogger logs gin gonic actions
+func NewLogger(l *logrus.Logger) gin.HandlerFunc {
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
