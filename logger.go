@@ -63,7 +63,7 @@ func NewLogger(l *logrus.Logger) gin.HandlerFunc {
 				} else if statusCode > 399 {
 					log.Warn("http request warning")
 				} else {
-					log.Info("http request info")
+					log.Debug("http request info")
 				}
 			}
 		}
