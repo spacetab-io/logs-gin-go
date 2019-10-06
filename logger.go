@@ -46,10 +46,10 @@ func NewLogger(l *logrus.Logger) gin.HandlerFunc {
 			})
 
 			if comment != "" {
-				log.WithField("comment", comment)
+				log = log.WithField("comment", comment)
 			}
 
-			log.WithField("latency", time.Now().Sub(start))
+			log = log.WithField("latency", time.Now().Sub(start))
 
 			if len(c.Errors) > 0 {
 				log.Error(c.Errors.ByType(gin.ErrorTypePrivate).String())
