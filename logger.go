@@ -10,13 +10,13 @@ import (
 
 // NewLogger logs gin gonic actions
 func NewLogger(l *logrus.Logger) gin.HandlerFunc {
-	start := time.Now()
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
 	}
 	var skip map[string]struct{}
 	return func(c *gin.Context) {
+		start := time.Now()
 		path := c.Request.URL.Path
 		c.Next()
 		if _, ok := skip[path]; !ok {
@@ -43,12 +43,13 @@ func NewLogger(l *logrus.Logger) gin.HandlerFunc {
 				"path":        path,
 				"referer":     c.Request.Referer(),
 				"query":       raw,
-				"latency":     time.Now().Sub(start),
 			})
 
 			if comment != "" {
 				log.WithField("comment", comment)
 			}
+
+			log.WithField("latency", time.Now().Sub(start))
 
 			if len(c.Errors) > 0 {
 				log.Error(c.Errors.ByType(gin.ErrorTypePrivate).String())
