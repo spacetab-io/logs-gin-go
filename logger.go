@@ -10,50 +10,45 @@ import (
 
 // NewLogger logs gin gonic actions
 func NewLogger(l *logrus.Logger) gin.HandlerFunc {
+	start := time.Now()
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown"
 	}
 	var skip map[string]struct{}
 	return func(c *gin.Context) {
-		start := time.Now()
 		path := c.Request.URL.Path
-		raw := c.Request.URL.RawQuery
-
 		c.Next()
-
 		if _, ok := skip[path]; !ok {
-			clientIP := c.ClientIP()
-			method := c.Request.Method
 			statusCode := c.Writer.Status()
-
 			comment := c.Errors.ByType(gin.ErrorTypePrivate).String()
-
+			raw := c.Request.URL.RawQuery
 			if raw != "" {
 				path = path + "?" + raw
 			}
 
-			// Stop timer
-			end := time.Now()
-			latency := end.Sub(start)
 			dataLength := c.Writer.Size()
 			if dataLength < 0 {
 				dataLength = 0
 			}
 
 			log := l.WithFields(logrus.Fields{
-				"hostname":   hostname,
-				"latency":    latency,
-				"clientIP":   clientIP,
-				"status":     statusCode,
-				"proto":      c.Request.Proto,
-				"method":     method,
-				"path":       path,
-				"referer":    c.Request.Referer(),
-				"query":      raw,
-				"comment":    comment,
-				"dataLength": dataLength,
+				"hostname":    hostname,
+				"clientIP":    c.ClientIP(),
+				"proto":       c.Request.Proto,
+				"method":      c.Request.Method,
+				"contentType": c.ContentType(),
+				"dataLength":  dataLength,
+				"status":      statusCode,
+				"path":        path,
+				"referer":     c.Request.Referer(),
+				"query":       raw,
+				"latency":     time.Now().Sub(start),
 			})
+
+			if comment != "" {
+				log.WithField("comment", comment)
+			}
 
 			if len(c.Errors) > 0 {
 				log.Error(c.Errors.ByType(gin.ErrorTypePrivate).String())
