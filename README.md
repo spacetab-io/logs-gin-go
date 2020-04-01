@@ -1,4 +1,4 @@
-logs-go-gin
+logs-gin-go
 -----------
 
 Logger fo gin gonic
@@ -13,7 +13,7 @@ package main
 import (
     "time"
 
-    ginLogger "github.com/microparts/logs-go-gin"
+    ginLogger "github.com/spacetab-io/logs-gin-go"
 
     "github.com/gin-gonic/gin"
     "github.com/sirupsen/logrus"
