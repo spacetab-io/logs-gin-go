@@ -1,4 +1,4 @@
-module github.com/microparts/logs-gin-go
+module github.com/spacetab-io/logs-gin-go
 
 go 1.13
 
