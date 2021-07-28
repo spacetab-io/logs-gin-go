@@ -11,23 +11,19 @@ Pass logrus instance to constructor.
 package main
 
 import (
-    "time"
-
-    ginLogger "github.com/spacetab-io/logs-gin-go"
-
-    "github.com/gin-gonic/gin"
-    "github.com/sirupsen/logrus"
+	"github.com/gin-gonic/gin"
+	ginLogger "github.com/spacetab-io/logs-gin-go"
 )
 
 func main() {
-    r := gin.New()
-    r.Use(ginLogger.NewLogger(logrus.New()), gin.Recovery())
-  
-    // pingpong
-    r.GET("/ping", func(c *gin.Context) {
-        c.Data(200, "text/plain", []byte("pong"))
-    })
-    _ = r.Run("127.0.0.1:8080")
+	r := gin.New()
+	r.Use(ginLogger.NewLogger(logrus.New()), gin.Recovery())
+
+	// pingpong
+	r.GET("/ping", func(c *gin.Context) {
+		c.Data(200, "text/plain", []byte("pong"))
+	})
+	_ = r.Run("127.0.0.1:8080")
 }
 ```
 
